@@ -8,6 +8,8 @@ export default function InitialScreen() {
   difficulty
   number of questions
   */
+  const [categoriesObject, areCategoriesLoading] = useFetch("https://opentdb.com/api_category.php");
+  const categories = categoriesObject.trivia_categories;
   
   return (
     <form
@@ -17,7 +19,13 @@ export default function InitialScreen() {
     >
       <p>
         <label htmlFor="category-select">Category</label>
-        <select id="category-select"></select>
+        <select id="category-select">
+          {categories?.map(c => {
+            return (
+              <option>{c}</option>
+            )
+          })}
+        </select>
       </p>
 
       <p>

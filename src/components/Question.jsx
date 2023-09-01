@@ -1,11 +1,18 @@
 import React from "react";
+import Timer from "./Timer";
 
-export default function Question({question, /* options */}) {
-  const options = ["a", "b", "c", "d", "e"];
-
+export default function Question({
+  question,
+  options = ["a", "b", "c", "d", "e"],
+  correctOption
+}) {
+   /* 
+   - State
+   selectedOption
+    */
   return (
     <div>
-      <p>Question</p>
+      <p>Question <Timer timeout={20} /></p>
       <ul>
         {options.map((o) => {
           return (
