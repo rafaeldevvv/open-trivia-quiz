@@ -21,8 +21,8 @@ export default function useFetch(url = "") {
         .then((data) => {
           if (!ignore) {
             setResult(data);
+            setIsLoading(false);
           }
-          setIsLoading(false);
         })
         .catch((reason) => {
           setError(reason);

@@ -5,8 +5,14 @@ import Select from "./Select";
 import AmountInput from "./AmountInput";
 import FormField from "./FormField";
 import CategorySelect from "./CategorySelect";
+import TimeLimitToggle from "./TimeLimitToggle";
+import AlertParagraph from './AlertParagraph';
 
-export default function InitialScreen({ onStart }) {
+export default function InitialScreen({
+  onStart,
+  isTimeLimitOn,
+  onToggleTimeLimit,
+}) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [questionAmount, setQuestionAmount] = useState(20);
@@ -26,9 +32,9 @@ export default function InitialScreen({ onStart }) {
       const numbersOfCategoriesQuestions = await Promise.all(
         categories.map((c) => {
           /* fetch question count for a specific category */
-          return fetch(
-            `https://opentdb.com/api_count.php?category=${c.id}`
-          ).then((response) => response.json());
+          return fetch(`https://opentdb.com/api_count.php?category=${c.id}`)
+            .then((response) => response.json())
+            .catch(setQuestionCountsError);
         })
       );
 
@@ -71,12 +77,9 @@ export default function InitialScreen({ onStart }) {
 
   let maxNumberOfQuestions = null;
   /* if the question counts have been retrieved and the user has selected a category */
-  if (questionCounts) {
-    /* ##########################################################################################
-    ###########################################################################
-    display 4000 questions for no selected category */
+  if (questionCounts && selectedCategoryId) {
     maxNumberOfQuestions = getCategoryQuestionCount(
-      selectedCategoryId || 9, // defaults to general knowledge
+      selectedCategoryId, // defaults to general knowledge
       selectedDifficulty || "total" // defaults to the count of all questions
     );
   }
@@ -85,22 +88,18 @@ export default function InitialScreen({ onStart }) {
     categories?.find((c) => c.id == selectedCategoryId)?.name || "any category";
 
   const thereIsAnError = !!(categoriesError || questionCountsError);
+  const displayMaxNumAlert = !!questionCounts && !!selectedCategoryId;
 
   return (
     <form
+      className="initial-form"
       onSubmit={(event) => {
         event.preventDefault();
+        onStart(selectedCategoryId, selectedDifficulty, questionAmount);
       }}
     >
-      <p>
-        Required{" "}
-        <strong>
-          <span aria-label="required">*</span>
-        </strong>
-      </p>
-
       <CategorySelect
-        selectedCategoryId={setSelectedCategoryId}
+        selectedCategoryId={selectedCategoryId}
         isLoading={areCategoriesLoading}
         categories={categories}
         onChange={setSelectedCategoryId}
@@ -118,31 +117,39 @@ export default function InitialScreen({ onStart }) {
         />
       </FormField>
 
-      <AmountInput
-        value={questionAmount}
-        onChange={setQuestionAmount}
-        categoryName={selectedCategoryName || "any category"}
-        difficulty={selectedDifficulty || "any"}
-        max={maxNumberOfQuestions}
-        displayWarning={!!questionCounts}
+      <FormField
+        label="Number of questions (required)"
+        labelIsFor="number-of-questions"
+      >
+        <AmountInput
+          value={questionAmount}
+          onChange={setQuestionAmount}
+          max={maxNumberOfQuestions}
+        />
+      </FormField>
+
+      {displayMaxNumAlert && (
+        <AlertParagraph
+          text={`${maxNumberOfQuestions} questions available for ${
+            selectedCategoryName || "any category"
+          }, ${selectedDifficulty || "any"} difficulty`}
+          type="calm"
+        />
+      )}
+
+      <TimeLimitToggle
+        onToggleTimeLimit={onToggleTimeLimit}
+        isTimeLimitOn={isTimeLimitOn}
       />
 
-      <p
-        role="alert"
-        className={`error-field ${thereIsAnError ? "active" : ""}`}
-      >
-        {thereIsAnError &&
-          "Something went wrong when retrieving resources. Please try reloading the page."}
-      </p>
+      {thereIsAnError && (
+        <AlertParagraph
+          text="Something went wrong when retrieving resources. Please try reloadingthe page."
+          type="urgent"
+        />
+      )}
 
-      <button
-        type="submit"
-        className="btn lightblue-btn"
-        id="start-quiz-btn"
-        onClick={() =>
-          onStart(selectedCategoryId, selectedDifficulty, questionAmount)
-        }
-      >
+      <button type="submit" className="btn lightblue-btn" id="start-quiz-btn">
         Start quiz
       </button>
     </form>

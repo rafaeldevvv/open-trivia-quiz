@@ -1,16 +1,23 @@
-/* Elements */
+/* GENERAL STYLES */
 :root {
   font-family: sans-serif;
+  --primary-blue: hsl(240, 50%, 4%);
+  --secondary-blue: hsl(240, 50%, 10%);
 }
 
 body {
-  background-color: hsl(240, 50%, 4%);
+  background-color: var(--primary-blue);
   color: white;
 }
 
 :focus {
   outline: 2px dotted white;
   outline-offset: 1px;
+}
+
+[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* UTILITIES */
@@ -42,6 +49,30 @@ body {
   background-color: white;
 }
 
+.lightgreen-btn {
+  background-color: hsl(120, 80%, 70%);
+}
+
+.flex {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .spinner {
   display: inline-block;
   border-color: currentColor;
@@ -59,15 +90,86 @@ body {
     transform: rotate(360deg);
   }
 }
-main {
-  padding-block: 5rem;
+/* CUSTOM TOGGLE */
+.checkbox-toggle-label {
+  cursor: pointer;
+}
+
+.checkbox-toggle-button {
+  --toggle-height: 1rem;
+  --padding: 0.1rem;
+  --ball-height: calc(var(--toggle-height) - var(--padding) * 2);
+  display: inline-block;
+  height: var(--toggle-height);
+  width: 2.5rem;
+  border-radius: 4rem;
+  position: relative;
+  background-color: white;
+  /* 
+  this is needed so when the label is clicked
+  the checkbox is toggled 
+  */
+  pointer-events: none;
+}
+.checkbox-toggle-button.active .checkbox-toggle-ball {
+  left: calc(100% - var(--padding) - var(--ball-height));
+}
+.checkbox-toggle-button.focused {
+  outline: 2px dotted white;
+  outline-offset: 1px;
+}
+
+.checkbox-toggle-ball {
+  position: absolute;
+  left: var(--padding);
+  transition-property: left;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  top: 50%;
+  transform: translateY(-50%);
+  height: var(--ball-height);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--primary-blue);
+}
+
+.alert-paragraph {
+  text-align: center;
+  padding: 0.3rem;
+  border-width: 1px;
+  border-style: solid;
+}
+.alert-paragraph.calm {
+  border-color: #fff;
+  background-color: #000;
+}
+.alert-paragraph.urgent {
+  background-color: hsla(0, 100%, 50%, 0.1);
+  border-color: #f00;
+  color: hsl(0, 100%, 80%);
+}
+
+/* STRUCTURE */
+#root {
   padding-inline: 2rem;
-  max-width: 400px;
+  max-width: 500px;
   margin-inline: auto;
 }
-main h1 {
+
+header {
+  margin-block: 5rem 3rem;
+}
+header h1 {
   text-align: center;
   margin-bottom: 2rem;
+}
+
+footer {
+  margin-block: 3rem;
+  text-align: center;
+}
+footer a {
+  color: white;
 }
 
 /* 
@@ -75,39 +177,89 @@ main h1 {
 ################################################################################################################
 ################################################################################################################
 InitialScreen */
-form p:first-of-type {
+.initial-form p:first-of-type {
   font-size: 0.7rem;
   margin-bottom: 1rem;
 }
-form .form-field {
+.initial-form .form-field {
   margin-bottom: 0.6rem;
 }
-form label {
+.initial-form label:not([for=time-limit-checkbox]) {
   font-size: 0.8rem;
   margin-bottom: 0.2rem;
   display: block;
 }
-form select option {
+.initial-form select option {
   font-size: 0.7rem;
 }
-form select[disabled] {
-  opacity: 0.6;
-}
-form select,
-form input {
+.initial-form select,
+.initial-form input:not(#time-limit-checkbox) {
   border: 1px solid white;
   width: 100%;
-  background-color: hsl(240, 50%, 10%);
+  background-color: var(--secondary-blue);
   color: white;
   display: block;
   padding: 0.5rem;
   font-size: 0.8rem;
 }
-form select:hover, form select:focus,
-form input:hover,
-form input:focus {
+.initial-form select:hover, .initial-form select:focus,
+.initial-form input:not(#time-limit-checkbox):hover,
+.initial-form input:not(#time-limit-checkbox):focus {
   filter: brightness(1.3);
 }
-form .max-number-questions {
-  margin-top: 0.4em;
+
+/* Questions */
+.question-wrapper .question-metadata {
+  margin-bottom: 1rem;
+}
+.question-wrapper .question-category,
+.question-wrapper .question-difficulty {
+  padding: 0.3rem 0.6rem;
+  display: block;
+  background-color: white;
+  color: hsl(240, 50%, 10%);
+  font-weight: bold;
+  border-radius: 0.2rem;
+}
+.question-wrapper .question,
+.question-wrapper .answer {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  padding: 0.8rem 1.4rem;
+}
+.question-wrapper .question {
+  margin-bottom: 1.2rem;
+}
+.question-wrapper .answers {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.question-wrapper .answers li + li {
+  margin-top: 0.8rem;
+}
+.question-wrapper .answer {
+  display: flex;
+  gap: 0.6rem;
+  cursor: pointer;
+  position: relative;
+}
+.question-wrapper .answer:hover:not(.selected, .wrong, .correct) {
+  background-color: hsla(0, 0%, 100%, 0.05);
+}
+.question-wrapper .answer.selected {
+  outline: 3px solid white;
+}
+.question-wrapper .answer.correct {
+  outline: 3px solid limegreen;
+  background-color: hsla(120, 100%, 50%, 0.1);
+}
+.question-wrapper .answer.wrong {
+  outline: 3px solid red;
+  background-color: hsla(0, 100%, 50%, 0.1);
+}
+.question-wrapper .answer-icon {
+  height: 25px;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 }/*# sourceMappingURL=index.css.map */
