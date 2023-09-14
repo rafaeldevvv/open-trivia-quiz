@@ -3,9 +3,10 @@ import Question from "./Question";
 
 export default function QuestionsSequence({
   questions,
-  onCorrect,
+  onConfirmAnswer,
   onEnd,
   isTimeLimitOn,
+  options
 }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
@@ -21,9 +22,10 @@ export default function QuestionsSequence({
       <Question
         key={currentQuestion.question}
         question={currentQuestion}
-        onCorrect={onCorrect}
+        onConfirmAnswer={onConfirmAnswer}
         onNext={handleNext}
         isTimeLimitOn={isTimeLimitOn}
+        options={options}
       />
     </div>
   );

@@ -5,9 +5,19 @@
   --secondary-blue: hsl(240, 50%, 10%);
 }
 
+body,
+html {
+  min-height: 100vh;
+}
+
 body {
   background-color: var(--primary-blue);
   color: white;
+}
+
+h1,
+h2 {
+  letter-spacing: 1px;
 }
 
 :focus {
@@ -149,6 +159,25 @@ body {
   color: hsl(0, 100%, 80%);
 }
 
+.question-difficulty {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  font-weight: bold;
+}
+.question-difficulty.easy {
+  background-color: hsl(240, 100%, 28%);
+  color: white;
+}
+.question-difficulty.medium {
+  background-color: hsl(60, 100%, 65%);
+  color: black;
+}
+.question-difficulty.hard {
+  background-color: hsl(0, 100%, 25%);
+  color: white;
+}
+
 /* STRUCTURE */
 #root {
   padding-inline: 2rem;
@@ -208,18 +237,27 @@ InitialScreen */
   filter: brightness(1.3);
 }
 
-/* Questions */
+/* 
+################################################################################################################
+################################################################################################################
+################################################################################################################
+QuestionsSequence */
 .question-wrapper .question-metadata {
   margin-bottom: 1rem;
 }
 .question-wrapper .question-category,
 .question-wrapper .question-difficulty {
   padding: 0.3rem 0.6rem;
-  display: block;
+  border-radius: 0.2rem;
+}
+.question-wrapper .question-category {
+  font-weight: bold;
   background-color: white;
   color: hsl(240, 50%, 10%);
-  font-weight: bold;
-  border-radius: 0.2rem;
+}
+.question-wrapper .question-difficulty {
+  display: flex;
+  align-items: center;
 }
 .question-wrapper .question,
 .question-wrapper .answer {
@@ -262,4 +300,107 @@ InitialScreen */
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* ########################################################################################
+########################################################################################
+######################################################################################## 
+Final screen*/
+.quiz-finished-section,
+.questions-section {
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+.quiz-finished-section h2,
+.questions-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-finished-section {
+  margin-bottom: 2rem;
+  text-align: center;
+  padding: 1.8rem;
+}
+.quiz-finished-section .out-of {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+.quiz-finished-section .percentage {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.questions-section {
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.tab-buttons li {
+  width: 100%;
+}
+
+.tab-button {
+  display: block;
+  text-align: center;
+  background-color: hsla(0, 0%, 0%, 0.4);
+  text-decoration: none;
+  color: white;
+  width: 100%;
+  padding: 1rem 0;
+}
+.tab-button.active {
+  box-shadow: inset 0 -3px 0 white;
+}
+
+.question-list > li {
+  margin-top: 1rem;
+  background-color: hsla(0, 0%, 0%, 0.4);
+  padding: 1.2rem;
+}
+.question-list.hidden {
+  position: absolute;
+  left: -10000px;
+}
+.question-list .question {
+  margin-bottom: 1.5rem;
+}
+.question-list .question-difficulty {
+  margin-bottom: 0.7rem;
+}
+.question-list .question-text {
+  margin-bottom: 0.8rem;
+}
+.question-list .answer-list {
+  margin-bottom: 1rem;
+}
+.question-list .answer {
+  margin-block: 0.3rem;
+  background-color: hsla(0, 0%, 0%, 0.4);
+  padding: 0.6rem;
+}
+.question-list .correct-answer,
+.question-list .wrong-answer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.question-list .answer-icon {
+  height: 20px;
+}
+.question-list .correct-answer {
+  background-color: hsla(120, 100%, 50%, 0.1);
+  border: 3px solid limegreen;
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.question-list .wrong-answer {
+  background-color: hsla(0, 100%, 50%, 0.2);
+  border: 3px solid red;
+  padding: 0.3rem 0.5rem;
 }/*# sourceMappingURL=index.css.map */

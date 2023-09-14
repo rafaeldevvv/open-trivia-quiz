@@ -6,9 +6,19 @@
   --secondary-blue: hsl(240, 50%, 10%);
 }
 
+body,
+html {
+  min-height: 100vh;
+}
+
 body {
   background-color: var(--primary-blue);
   color: white;
+}
+
+h1,
+h2 {
+  letter-spacing: 1px;
 }
 
 :focus {
@@ -153,9 +163,29 @@ body {
   }
 
   &.urgent {
-    background-color: hsla(0, 100%, 50%, .1);
+    background-color: hsla(0, 100%, 50%, 0.1);
     border-color: #f00;
     color: hsl(0, 100%, 80%);
+  }
+}
+
+.question-difficulty {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  font-weight: bold;
+
+  &.easy {
+    background-color: hsl(240, 100%, 28%);
+    color: white;
+  }
+  &.medium {
+    background-color: hsl(60, 100%, 65%);
+    color: black;
+  }
+  &.hard {
+    background-color: hsl(0, 100%, 25%);
+    color: white;
   }
 }
 
@@ -228,7 +258,11 @@ InitialScreen */
   }
 }
 
-/* Questions */
+/* 
+################################################################################################################
+################################################################################################################
+################################################################################################################
+QuestionsSequence */
 .question-wrapper {
   .question-metadata {
     margin-bottom: 1rem;
@@ -236,12 +270,17 @@ InitialScreen */
 
   .question-category,
   .question-difficulty {
-    padding: 0.3rem .6rem;
-    display: block;
+    padding: 0.3rem 0.6rem;
+    border-radius: .2rem;
+  }
+  .question-category {
+    font-weight: bold;
     background-color: white;
     color: hsl(240, 50%, 10%);
-    font-weight: bold;
-    border-radius: 0.2rem;
+  }
+  .question-difficulty {
+    display: flex;
+    align-items: center;
   }
 
   .question,
@@ -301,3 +340,115 @@ InitialScreen */
 ########################################################################################
 ######################################################################################## 
 Final screen*/
+.quiz-finished-section,
+.questions-section {
+  background-color: hsla(0, 0%, 100%, 0.1);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.quiz-finished-section {
+  margin-bottom: 2rem;
+  text-align: center;
+  padding: 1.8rem;
+
+  .out-of {
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  .percentage {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.questions-section {
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  li {
+    width: 100%;
+  }
+}
+.tab-button {
+  display: block;
+  text-align: center;
+  background-color: hsla(0, 0%, 0%, 0.4);
+  text-decoration: none;
+  color: white;
+  width: 100%;
+  padding: 1rem 0;
+
+  &.active {
+    box-shadow: inset 0 -3px 0 white;
+  }
+}
+
+.question-list {
+  > li {
+    margin-top: 1rem;
+    background-color: hsla(0, 0%, 0%, 0.4);
+    padding: 1.2rem;
+  }
+
+  &.hidden {
+    position: absolute;
+    left: -10000px;
+  }
+
+  .question {
+    margin-bottom: 1.5rem;
+  }
+
+  .question-difficulty {
+    margin-bottom: .7rem;
+  }
+
+  .question-text {
+    margin-bottom: 0.8rem;
+  }
+
+  .answer-list {
+    margin-bottom: 1rem;
+  }
+
+  .answer {
+    margin-block: 0.3rem;
+    background-color: hsla(0, 0%, 0%, 0.4);
+    padding: 0.6rem;
+  }
+
+  .correct-answer,
+  .wrong-answer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .answer-icon {
+    height: 20px;
+  }
+
+  .correct-answer {
+    background-color: hsla(120, 100%, 50%, 0.1);
+    border: 3px solid limegreen;
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .wrong-answer {
+    background-color: hsla(0, 100%, 50%, 0.2);
+    border: 3px solid red;
+    padding: 0.3rem 0.5rem;
+  }
+}

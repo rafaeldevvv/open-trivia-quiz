@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import Timer from "./Timer";
+import AnswerIcon from "./AnswerIcon";
 import getIdFrom from "../utils/getIdFrom.js";
 import capitalize from "../utils/capitalize";
 import randomOrder from "../utils/randomOrder";
@@ -7,15 +8,16 @@ import randomOrder from "../utils/randomOrder";
 export default function QuestionWrapper({
   question,
   isTimeLimitOn,
-  onCorrect = () => {},
+  onConfirmAnswer = () => {},
   onNext = () => {},
+  options,
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
 
   /* 
-  useMemo is used so that the answers aren't 
-  generated in a different order on every render
+    useMemo is used so that the answers aren't 
+    generated in a different order on every render
   */
   const answers = useMemo(() => {
     /* randomize answers */
@@ -24,18 +26,22 @@ export default function QuestionWrapper({
     );
   }, [question]);
 
-  /* if it is settled, either the user clicked confirm or timer has timed out */
-
-  function handleSettlement() {
-    if (selectedAnswer === question.correct_answer) onCorrect(question);
-    setIsAnswered(true);
-  }
-
-  const options = ["A", "B", "C", "D", "E"];
-
   const correctAnswer = question.correct_answer;
   const correctOption = options[answers.findIndex((a) => a === correctAnswer)];
   const isUserCorrect = selectedAnswer === correctAnswer;
+
+  /* if it is settled, either the user clicked confirm or timer has timed out */
+  function handleSettlement() {
+    onConfirmAnswer({
+      question: question.question,
+      answers: answers,
+      correctAnswer: correctAnswer,
+      userAnswer: selectedAnswer,
+      difficulty: question.difficulty,
+    });
+
+    setIsAnswered(true);
+  }
 
   return (
     <form
@@ -65,6 +71,7 @@ export default function QuestionWrapper({
         options={options}
       />
       {isAnswered && (
+        // this is announced because App.jsx wraps QuestionsSequence in an aria-live="polite" element
         <p className="sr-only">
           Option {correctOption}, {correctAnswer}, is the correct answer.{" "}
           {isUserCorrect ? "You got it!" : "You were wrong"}
@@ -73,8 +80,6 @@ export default function QuestionWrapper({
 
       <Buttons
         isAnswered={isAnswered}
-        onNextClick={onNext}
-        onConfirmAnswer={handleSettlement}
         confirmButtonDisabled={!selectedAnswer}
       />
     </form>
@@ -91,10 +96,18 @@ export function QuestionMetadata({ category, difficulty }) {
         Category:
         <br /> {category}
       </p>
-      <p className="question-difficulty">
-        Difficulty: <br /> {capitalize(difficulty)}
-      </p>
+
+      <QuestionDifficulty difficulty={difficulty} />
     </section>
+  );
+}
+
+export function QuestionDifficulty({ difficulty }) {
+  return (
+    <span className={`question-difficulty ${difficulty}`}>
+      <span className="sr-only">Difficulty</span>
+      {capitalize(difficulty)}
+    </span>
   );
 }
 
@@ -189,34 +202,7 @@ export function Answer({
   );
 }
 
-function AnswerIcon({ isCorrect }) {
-  if (isCorrect) {
-    return (
-      <img
-        className="answer-icon"
-        aria-hidden="true"
-        alt=""
-        src="images/tick.png"
-      />
-    );
-  } else {
-    return (
-      <img
-        className="answer-icon"
-        aria-hidden="true"
-        alt=""
-        src="images/block.svg"
-      />
-    );
-  }
-}
-
-export function Buttons({
-  isAnswered,
-  onConfirmAnswer,
-  onNextClick,
-  confirmButtonDisabled,
-}) {
+export function Buttons({ isAnswered, confirmButtonDisabled }) {
   return (
     <section className="buttons" aria-label="buttons">
       {!isAnswered && (
@@ -224,13 +210,14 @@ export function Buttons({
           type="submit"
           className="btn lightgreen-btn"
           disabled={confirmButtonDisabled}
+          aria-disabled={confirmButtonDisabled}
         >
           Confirm answer
         </button>
       )}
       {isAnswered && (
         <button type="submit" className="btn lightblue-btn">
-          Next question &gt;&gt;
+          Next question <span className="sr-only">&gt;&gt;</span>
         </button>
       )}
     </section>

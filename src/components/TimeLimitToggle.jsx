@@ -5,10 +5,10 @@ export default function TimeLimitToggle({ onToggleTimeLimit, isTimeLimitOn }) {
   return (
     <div className="form-field">
       <CheckboxToggle
-        isOn={isTimeLimitOn}
+        checked={isTimeLimitOn}
         onToggle={onToggleTimeLimit}
         id="time-limit-checkbox"
-        label="Time limit: "
+        label="Time limit (20 seconds p/question): "
         srWarning="Turn this off if you are using a screen reader"
       />
     </div>

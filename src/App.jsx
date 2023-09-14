@@ -8,7 +8,8 @@ export default function App() {
   /* choosing, playing, finished */
   const [status, setStatus] = useState("choosing");
   const [questions, setQuestions] = useState(null);
-  const [correctQuestions, setCorrectQuestions] = useState([]);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+
   const [isTimeLimitOn, setIsTimeLimitOn] = useState(true);
 
   async function handleStart(categoryId, difficulty, amount) {
@@ -29,9 +30,17 @@ export default function App() {
     setStatus("finished");
   }
 
+  function handlePlayAgain() {
+    setStatus("choosing");
+    setAnsweredQuestions([]);
+    setQuestions(null);
+  }
+
   const isChoosing = status === "choosing";
   const isPlaying = status === "playing";
   const isFinished = status === "finished";
+
+  const options = ["A", "B", "C", "D", "E"];
 
   return (
     <React.StrictMode>
@@ -39,31 +48,34 @@ export default function App() {
         <h1>Open Trivia DB Quiz</h1>
       </header>
       <main>
-        {isChoosing && (
-          <InitialScreen
-            onStart={handleStart}
-            isTimeLimitOn={isTimeLimitOn}
-            onToggleTimeLimit={setIsTimeLimitOn}
-          />
-        )}
         <div aria-live="polite">
+          {isChoosing && (
+            <InitialScreen
+              onStart={handleStart}
+              isTimeLimitOn={isTimeLimitOn}
+              onToggleTimeLimit={setIsTimeLimitOn}
+            />
+          )}
           {isPlaying && questions && (
             <QuestionsSequence
               questions={questions}
               isTimeLimitOn={isTimeLimitOn}
-              onCorrect={(correctQuestion) => {
-                setCorrectQuestions((cqs) => [...cqs, correctQuestion]);
+              onConfirmAnswer={(answeredQuestion) => {
+                setAnsweredQuestions((aqs) => [...aqs, answeredQuestion]);
               }}
               onEnd={handleEnd}
+              options={options}
+            />
+          )}
+          {isFinished && (
+            <FinalScreen
+              answeredQuestions={answeredQuestions}
+              questions={questions}
+              options={options}
+              onPlayAgain={handlePlayAgain}
             />
           )}
         </div>
-        {isFinished && (
-          <FinalScreen
-            correctQuestions={correctQuestions}
-            questions={questions}
-          />
-        )}
       </main>
       <footer>
         <p>

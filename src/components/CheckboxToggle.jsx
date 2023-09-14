@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 export default function CheckboxToggle({
-  isOn,
+  checked,
   id,
   onToggle,
   label,
   srWarning,
 }) {
+  const [isFocused, setIsFocused] = useState(false);
+
+  let buttonClassName = "checkbox-toggle-button";
+  if (checked) buttonClassName += " active";
+  if (isFocused) buttonClassName += " focused";
+
   return (
     <label
       className="checkbox-toggle-label flex align-center gap-1"
@@ -20,24 +26,26 @@ export default function CheckboxToggle({
         onChange={(e) => {
           onToggle(e.target.checked);
         }}
-        checked={isOn}
+        checked={checked}
         className="sr-only"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
-      <button
+      <span
         type="button"
         aria-hidden="true"
-        className={`checkbox-toggle-button ${isOn ? "active" : ""}`}
+        tabIndex="-1"
+        className={buttonClassName}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onToggle(!isOn);
+          if (e.key.indexOf(" ") !== -1) {
+            onToggle(!checked);
             e.preventDefault();
             e.stopPropagation();
           }
         }}
       >
         <span className="checkbox-toggle-ball"></span>
-        <span className="sr-only"></span>
-      </button>
+      </span>
     </label>
   );
 }
