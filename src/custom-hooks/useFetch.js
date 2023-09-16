@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import reportError from "../utils/reportError";
 
 export default function useFetch(url = "") {
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export default function useFetch(url = "") {
       setIsLoading(true);
       fetch(url)
         .then((response) => {
-          if (response.ok) {
+          if (response.status <= 299) {
             if (!ignore) return response.json();
           } else {
             throw new Error(response.statusText);
@@ -24,10 +24,7 @@ export default function useFetch(url = "") {
             setIsLoading(false);
           }
         })
-        .catch((reason) => {
-          setError(reason);
-          setIsLoading(false);
-        });
+        .catch(reportError);
     }
 
     fetchData();
@@ -37,5 +34,5 @@ export default function useFetch(url = "") {
     };
   }, [url]);
 
-  return [result, isLoading, error];
+  return [result, isLoading];
 }

@@ -6,10 +6,15 @@ export default function AmountInput({ max, onChange, value }) {
       type="number"
       min="1"
       max={max}
-      onChange={(e) => onChange(Number(e.target.value))}
+      onChange={(e) => {
+        const num = Number(e.target.value);
+        if (!isNaN(num) && Math.floor(num) === num) onChange(e.target.value);
+      }}
+      placeholder={`Enter 1 to ${max}`}
       value={value}
       required
       id="number-of-questions"
+      aria-live="off" // make input not get read twice
     />
   );
 }

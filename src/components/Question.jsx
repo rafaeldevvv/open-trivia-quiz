@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Timer from "./Timer";
 import AnswerIcon from "./AnswerIcon";
+import Button from "./Button";
 import getIdFrom from "../utils/getIdFrom.js";
 import capitalize from "../utils/capitalize";
 import randomOrder from "../utils/randomOrder";
@@ -11,6 +12,7 @@ export default function QuestionWrapper({
   onConfirmAnswer = () => {},
   onNext = () => {},
   options,
+  isLastQuestion,
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -41,6 +43,11 @@ export default function QuestionWrapper({
     });
 
     setIsAnswered(true);
+  }
+
+  let buttonText = "Confirm answer";
+  if (isAnswered) {
+    buttonText = isLastQuestion ? "Finish quiz" : "Next question >>";
   }
 
   return (
@@ -78,10 +85,7 @@ export default function QuestionWrapper({
         </p>
       )}
 
-      <Buttons
-        isAnswered={isAnswered}
-        confirmButtonDisabled={!selectedAnswer}
-      />
+      <Button type="submit" label={buttonText} disabled={!selectedAnswer} />
     </form>
   );
 }
@@ -90,11 +94,11 @@ export function QuestionMetadata({ category, difficulty }) {
   return (
     <section
       className="question-metadata flex space-between gap-1"
-      aria-label="about question"
+      aria-label="About question"
     >
       <p className="question-category">
-        Category:
-        <br /> {category}
+        <span className="sr-only">Category:</span>
+        {category}
       </p>
 
       <QuestionDifficulty difficulty={difficulty} />
@@ -144,22 +148,24 @@ export function Answers({
   options,
 }) {
   return (
-    <ul className="answers" aria-label="answers">
-      {answers.map((a, i) => {
-        return (
-          <li key={a}>
-            <Answer
-              answer={a}
-              onSelectAnswer={onSelectAnswer}
-              selected={a === selectedAnswer}
-              isCorrect={a === correctAnswer}
-              isAnswered={isAnswered}
-              option={options[i]}
-            />
-          </li>
-        );
-      })}
-    </ul>
+    <section aria-label="Answers">
+      <ul className="answers">
+        {answers.map((a, i) => {
+          return (
+            <li key={a}>
+              <Answer
+                answer={a}
+                onSelectAnswer={onSelectAnswer}
+                selected={a === selectedAnswer}
+                isCorrect={a === correctAnswer}
+                isAnswered={isAnswered}
+                option={options[i]}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 
@@ -194,32 +200,10 @@ export function Answer({
           }
         }}
         checked={selected}
-        aria-label={`option ${option}`}
       />
-      <span className="label-text">{answer}</span>{" "}
+      <span className="sr-only">Option {option} </span>
+      <span className="label-text">{answer}</span>
       {isAnswered && <AnswerIcon isCorrect={isCorrect} />}
     </label>
-  );
-}
-
-export function Buttons({ isAnswered, confirmButtonDisabled }) {
-  return (
-    <section className="buttons" aria-label="buttons">
-      {!isAnswered && (
-        <button
-          type="submit"
-          className="btn lightgreen-btn"
-          disabled={confirmButtonDisabled}
-          aria-disabled={confirmButtonDisabled}
-        >
-          Confirm answer
-        </button>
-      )}
-      {isAnswered && (
-        <button type="submit" className="btn lightblue-btn">
-          Next question <span className="sr-only">&gt;&gt;</span>
-        </button>
-      )}
-    </section>
   );
 }

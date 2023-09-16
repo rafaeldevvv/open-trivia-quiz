@@ -1,29 +1,35 @@
 import React, { useState } from "react";
-import InitialScreen from "./components/InitialScreen";
+import QuizForm from "./components/QuizForm";
 import QuestionsSequence from "./components/QuestionsSequence";
-import FinalScreen from "./components/FinalScreen";
-import decodeQuestion from "./utils/decodeQuestion.js";
+import QuizFinishedScreen from "./components/QuizFinishedScreen";
+import reportError from "./utils/reportError";
+import fetchQuestions from "./utils/fetchQuestions";
 
 export default function App() {
   /* choosing, playing, finished */
   const [status, setStatus] = useState("choosing");
   const [questions, setQuestions] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
 
   const [isTimeLimitOn, setIsTimeLimitOn] = useState(true);
 
-  async function handleStart(categoryId, difficulty, amount) {
-    const categoryQuery = categoryId ? `&category=${categoryId}` : "";
-    const difficultyQuery = difficulty ? `&difficulty=${difficulty}` : "";
+  async function handleStart(amount, categoryId, difficulty) {
+    setIsLoadingQuestions(true);
 
-    const questionsJSON = await fetch(
-      `https://opentdb.com/api.php?amount=${amount}&encode=url3986${categoryQuery}${difficultyQuery}`
-    )
-      .then((res) => res.json())
-      .catch(alert);
-
-    setQuestions(questionsJSON.results.map(decodeQuestion));
-    setStatus("playing");
+    try {
+      const questionsResult = await fetchQuestions(
+        amount,
+        categoryId,
+        difficulty
+      );
+      setQuestions(questionsResult);
+      setStatus("playing");
+    } catch (err) {
+      reportError(err);
+    } finally {
+      setIsLoadingQuestions(false);
+    }
   }
 
   function handleEnd() {
@@ -50,10 +56,11 @@ export default function App() {
       <main>
         <div aria-live="polite">
           {isChoosing && (
-            <InitialScreen
+            <QuizForm
               onStart={handleStart}
               isTimeLimitOn={isTimeLimitOn}
               onToggleTimeLimit={setIsTimeLimitOn}
+              isLoadingQuestions={isLoadingQuestions}
             />
           )}
           {isPlaying && questions && (
@@ -68,7 +75,7 @@ export default function App() {
             />
           )}
           {isFinished && (
-            <FinalScreen
+            <QuizFinishedScreen
               answeredQuestions={answeredQuestions}
               questions={questions}
               options={options}

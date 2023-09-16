@@ -46,23 +46,16 @@ h2 {
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  border: 0;
-  border-radius: 0.4rem;
   transition: {
     property: color, background-color;
     duration: 0.2s;
   }
-}
-.lightblue-btn {
-  background-color: hsl(240, 100%, 80%);
 
-  &:hover,
-  &:focus {
-    background-color: white;
-  }
-}
-.lightgreen-btn {
-  background-color: hsl(120, 80%, 70%);
+  background-color: #fff;
+  color: #000;
+
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .flex {
@@ -189,6 +182,22 @@ h2 {
   }
 }
 
+.alert-container {
+  background-color: #600;
+  border: 3px solid red;
+  color: white;
+  font-weight: bold;
+  font-size: .9rem;
+  padding: 0.5rem;
+
+  opacity: 0;
+  position: fixed;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 200px;
+}
+
 /* STRUCTURE */
 #root {
   padding-inline: 2rem;
@@ -229,10 +238,13 @@ InitialScreen */
     margin-bottom: 0.6rem;
   }
 
-  label:not([for="time-limit-checkbox"]) {
+  label {
     font-size: 0.8rem;
-    margin-bottom: 0.2rem;
+  }
+
+  label:not([for="time-limit-checkbox"]) {
     display: block;
+    margin-bottom: 0.2rem;
   }
 
   select {
@@ -242,7 +254,7 @@ InitialScreen */
   }
 
   select,
-  input:not(#time-limit-checkbox) {
+  #number-of-questions {
     border: 1px solid white;
     width: 100%;
     background-color: var(--secondary-blue);
@@ -370,7 +382,7 @@ Final screen*/
   font-size: 0.9rem;
 }
 
-.tab-buttons {
+.tablist {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
@@ -379,7 +391,8 @@ Final screen*/
     width: 100%;
   }
 }
-.tab-button {
+
+.tab {
   display: block;
   text-align: center;
   background-color: hsla(0, 0%, 0%, 0.4);
@@ -388,7 +401,7 @@ Final screen*/
   width: 100%;
   padding: 1rem 0;
 
-  &.active {
+  &.active-tab {
     box-shadow: inset 0 -3px 0 white;
   }
 }
@@ -398,11 +411,6 @@ Final screen*/
     margin-top: 1rem;
     background-color: hsla(0, 0%, 0%, 0.4);
     padding: 1.2rem;
-  }
-
-  &.hidden {
-    position: absolute;
-    left: -10000px;
   }
 
   .question {

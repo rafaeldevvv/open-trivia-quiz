@@ -26,6 +26,7 @@ export default function QuestionsSequence({
         onNext={handleNext}
         isTimeLimitOn={isTimeLimitOn}
         options={options}
+        isLastQuestion={currentQuestionIndex === questions.length - 1}
       />
     </div>
   );
