@@ -17,32 +17,13 @@ export default function QuizForm({
   isTimeLimitOn,
   onToggleTimeLimit,
   isLoadingQuestions,
+  categories,
+  questionCounts,
+  areCategoriesLoading
 }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [questionAmount, setQuestionAmount] = useState("");
-  const [questionCounts, setQuestionCounts] = useState(null);
-
-  const [categoriesObject, areCategoriesLoading] = useFetch(
-    "https://opentdb.com/api_category.php"
-  );
-  const categories = categoriesObject?.trivia_categories;
-
-  useEffect(() => {
-    if (!categoriesObject) return;
-    let ignore = false;
-
-    /* fetch the question count for each category */
-    Promise.all(categories.map((c) => fetchQuestionCount(c.id)))
-      .then((qcs) => {
-        if (!ignore) setQuestionCounts(qcs);
-      })
-      .catch(reportError);
-
-    return () => {
-      ignore = true;
-    };
-  }, [categories]);
 
   const difficulties = ["easy", "medium", "hard"].map((d) => ({
     id: d,
@@ -66,8 +47,12 @@ export default function QuizForm({
     );
   }
 
-  const selectedCategoryName =
-    categories?.find((c) => c.id == selectedCategoryId)?.name || "any category";
+  let selectedCategoryName = "any category";
+  if (categories) {
+    selectedCategoryName = categories.find(
+      (c) => c.id == selectedCategoryId
+    ).name;
+  }
 
   const displayMaxNumAlert =
     !!questionCounts && !!selectedCategoryId && maxNumberOfQuestions < 50;
@@ -112,16 +97,16 @@ export default function QuizForm({
 
       {displayMaxNumAlert ? (
         <LiveParagraph
-          text={`${maxNumberOfQuestions} questions available for ${
-            selectedCategoryName || "any category"
-          }, ${selectedDifficulty || "any"} difficulty`}
+          text={`${maxNumberOfQuestions} questions available for ${selectedCategoryName}, ${
+            selectedDifficulty || "any"
+          } difficulty`}
           type="calm"
         />
       ) : (
         <LiveParagraph
-          text={`50+ questions available for ${
-            selectedCategoryName || "any category"
-          }, ${selectedDifficulty || "any"} difficulty`}
+          text={`50+ questions available for ${selectedCategoryName}, ${
+            selectedDifficulty || "any"
+          } difficulty`}
         />
       )}
 

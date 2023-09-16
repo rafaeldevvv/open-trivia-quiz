@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuizForm from "./components/QuizForm";
 import QuestionsSequence from "./components/QuestionsSequence";
 import QuizFinishedScreen from "./components/QuizFinishedScreen";
 import reportError from "./utils/reportError";
-import fetchQuestions from "./utils/fetchQuestions";
+import {
+  fetchQuestions,
+  fetchCategories,
+  fetchQuestionCount,
+} from "./utils/fetch";
 
 export default function App() {
   /* choosing, playing, finished */
@@ -11,8 +15,47 @@ export default function App() {
   const [questions, setQuestions] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
-
   const [isTimeLimitOn, setIsTimeLimitOn] = useState(true);
+
+  const [categories, setCategories] = useState([]);
+  const [areCategoriesLoading, setAreCategoriesLoading] = useState(false);
+  const [questionCounts, setQuestionCounts] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    setAreCategoriesLoading(true);
+    fetchCategories()
+      .then((categories) => {
+        if (!ignore) {
+          setCategories(categories);
+          setAreCategoriesLoading(false);
+        }
+      })
+      .catch(reportError);
+
+    return () => {
+      ignore = true;
+      setAreCategoriesLoading(false);
+    };
+  }, []);
+
+  // chaining effects because to fetch the question counts, i first need the categories
+  useEffect(() => {
+    if (categories.length === 0) return;
+    let ignore = false;
+
+    /* fetch the question count for each category */
+    Promise.all(categories.map((c) => fetchQuestionCount(c.id)))
+      .then((qcs) => {
+        if (!ignore) setQuestionCounts(qcs);
+      })
+      .catch(reportError);
+
+    return () => {
+      ignore = true;
+    };
+  }, [categories]);
 
   async function handleStart(amount, categoryId, difficulty) {
     setIsLoadingQuestions(true);
@@ -61,6 +104,9 @@ export default function App() {
               isTimeLimitOn={isTimeLimitOn}
               onToggleTimeLimit={setIsTimeLimitOn}
               isLoadingQuestions={isLoadingQuestions}
+              categories={categories}
+              questionCounts={questionCounts}
+              areCategoriesLoading={areCategoriesLoading}
             />
           )}
           {isPlaying && questions && (
