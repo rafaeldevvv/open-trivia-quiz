@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import capitalize from "../utils/capitalize";
-import fetchQuestionCount from "../utils/fetchQuestionCount";
-import reportError from "../utils/reportError";
-import useFetch from "../custom-hooks/useFetch";
 import Select from "./Select";
 import AmountInput from "./AmountInput";
 import FormField from "./FormField";
@@ -12,6 +9,12 @@ import LiveParagraph from "./LiveParagraph";
 import Spinner from "./Spinner";
 import Button from "./Button";
 
+function getCategoryQuestionCount(questionCounts, id, difficulty) {
+  let categoryQuestionCount = questionCounts.find((qc) => qc.categoryId === id);
+
+  return categoryQuestionCount.count[difficulty];
+}
+
 export default function QuizForm({
   onStart,
   isTimeLimitOn,
@@ -19,7 +22,7 @@ export default function QuizForm({
   isLoadingQuestions,
   categories,
   questionCounts,
-  areCategoriesLoading
+  areCategoriesLoading,
 }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
@@ -30,28 +33,20 @@ export default function QuizForm({
     name: capitalize(d),
   }));
 
-  function getCategoryQuestionCount(id, difficulty) {
-    let categoryQuestionCount = questionCounts.find(
-      (qc) => qc.categoryId === id
-    );
-
-    return categoryQuestionCount.count[difficulty];
-  }
-
   let maxNumberOfQuestions = 50;
   /* if the question counts have been retrieved and the user has selected a category */
-  if (questionCounts && selectedCategoryId) {
+  if (questionCounts.length > 0 && selectedCategoryId) {
     maxNumberOfQuestions = getCategoryQuestionCount(
+      questionCounts,
       selectedCategoryId,
       selectedDifficulty || "total" // defaults to the count of all questions
     );
   }
 
   let selectedCategoryName = "any category";
-  if (categories) {
-    selectedCategoryName = categories.find(
-      (c) => c.id == selectedCategoryId
-    ).name;
+  if (categories.length > 0) {
+    const selectedCategory = categories.find((c) => c.id == selectedCategoryId);
+    if (selectedCategory) selectedCategoryName = selectedCategory.name;
   }
 
   const displayMaxNumAlert =

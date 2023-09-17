@@ -7,6 +7,7 @@
 
 body,
 html {
+  scroll-behavior: smooth;
   min-height: 100vh;
 }
 
@@ -386,9 +387,6 @@ Final screen*/
   margin-block: 0.3rem;
   background-color: hsla(0, 0%, 0%, 0.4);
   padding: 0.6rem;
-}
-.question-list .correct-answer,
-.question-list .wrong-answer {
   display: flex;
   justify-content: space-between;
   align-items: center;
