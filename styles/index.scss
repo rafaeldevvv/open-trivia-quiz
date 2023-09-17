@@ -1,7 +1,7 @@
 /* GENERAL STYLES */
 :root {
   font-family: sans-serif;
-  
+
   --primary-blue: hsl(240, 50%, 4%);
   --secondary-blue: hsl(240, 50%, 10%);
 }
@@ -47,16 +47,55 @@ h2 {
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  transition: {
-    property: color, background-color;
-    duration: 0.2s;
-  }
 
   background-color: #fff;
   color: #000;
 
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
+
+  position: relative;
+  left: 0;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    background-color: #fff;
+  }
+
+  &::after {
+    left: 0;
+    width: 0;
+  }
+
+  &::before {
+    left: 0;
+    width: 0;
+  }
+
+  &, &::after, &::before {
+    transition: {
+      property: left, width;
+      duration: .5s;
+    }
+  }
+}
+.btn:hover:not([disabled]), .btn:focus {
+  left: 24px;
+
+  &::before {
+    left: -24px;
+    width: 6px;
+  }
+  &::after {
+    left: -14px;
+    width: 9px;
+  }
 }
 
 .flex {
@@ -188,7 +227,7 @@ h2 {
   border: 3px solid red;
   color: white;
   font-weight: bold;
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 0.5rem;
 
   opacity: 0;
@@ -284,7 +323,7 @@ QuestionsSequence */
   .question-category,
   .question-difficulty {
     padding: 0.3rem 0.6rem;
-    border-radius: .2rem;
+    border-radius: 0.2rem;
   }
   .question-category {
     font-weight: bold;
@@ -317,6 +356,7 @@ QuestionsSequence */
 
   .answer {
     display: flex;
+    align-items: center;
     gap: 0.6rem;
     cursor: pointer;
     position: relative;
@@ -419,7 +459,7 @@ Final screen*/
   }
 
   .question-difficulty {
-    margin-bottom: .7rem;
+    margin-bottom: 0.7rem;
   }
 
   .question-text {
@@ -434,6 +474,10 @@ Final screen*/
     margin-block: 0.3rem;
     background-color: hsla(0, 0%, 0%, 0.4);
     padding: 0.6rem;
+  }
+
+  .correct-answer,
+  .wrong-answer {
     display: flex;
     justify-content: space-between;
     align-items: center;

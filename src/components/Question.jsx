@@ -15,7 +15,7 @@ export default function QuestionWrapper({
   isLastQuestion,
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [isSettled, setIsSettled] = useState(false);
 
   /* 
     useMemo is used so that the answers aren't 
@@ -42,11 +42,11 @@ export default function QuestionWrapper({
       difficulty: question.difficulty,
     });
 
-    setIsAnswered(true);
+    setIsSettled(true);
   }
 
   let buttonText = "Confirm answer";
-  if (isAnswered) {
+  if (isSettled) {
     buttonText = isLastQuestion ? "Finish quiz" : "Next question >>";
   }
 
@@ -55,7 +55,7 @@ export default function QuestionWrapper({
       className="question-wrapper"
       onSubmit={(e) => {
         e.preventDefault();
-        if (isAnswered) onNext();
+        if (isSettled) onNext();
         else handleSettlement();
       }}
     >
@@ -66,7 +66,7 @@ export default function QuestionWrapper({
       <Question
         questionText={question.question}
         isTimeLimitOn={isTimeLimitOn}
-        isAnswered={isAnswered}
+        isSettled={isSettled}
         onTimerFinished={handleSettlement}
       />
       <Answers
@@ -74,10 +74,10 @@ export default function QuestionWrapper({
         onSelectAnswer={setSelectedAnswer}
         selectedAnswer={selectedAnswer}
         correctAnswer={correctAnswer}
-        isAnswered={isAnswered}
+        isSettled={isSettled}
         options={options}
       />
-      {isAnswered && (
+      {isSettled && (
         // this is announced because App.jsx wraps QuestionsSequence in an aria-live="polite" element
         <p className="sr-only">
           Option {correctOption}, {correctAnswer}, is the correct answer.{" "}
@@ -85,7 +85,11 @@ export default function QuestionWrapper({
         </p>
       )}
 
-      <Button type="submit" label={buttonText} disabled={!selectedAnswer} />
+      <Button
+        type="submit"
+        label={buttonText}
+        disabled={!selectedAnswer && !isSettled}
+      />
     </form>
   );
 }
@@ -116,7 +120,7 @@ export function QuestionDifficulty({ difficulty }) {
 }
 
 export function Question({
-  isAnswered,
+  isSettled,
   onTimerFinished,
   isTimeLimitOn,
   questionText,
@@ -127,7 +131,7 @@ export function Question({
       className="question flex space-between gap-1 align-center"
     >
       <p>{questionText}</p>
-      {!isAnswered && isTimeLimitOn && (
+      {!isSettled && isTimeLimitOn && (
         <Timer
           duration={20000}
           onFinish={onTimerFinished}
@@ -144,7 +148,7 @@ export function Answers({
   onSelectAnswer,
   selectedAnswer,
   correctAnswer,
-  isAnswered,
+  isSettled,
   options,
 }) {
   return (
@@ -158,7 +162,7 @@ export function Answers({
                 onSelectAnswer={onSelectAnswer}
                 selected={a === selectedAnswer}
                 isCorrect={a === correctAnswer}
-                isAnswered={isAnswered}
+                isSettled={isSettled}
                 option={options[i]}
               />
             </li>
@@ -173,14 +177,14 @@ export function Answer({
   answer,
   onSelectAnswer,
   selected,
-  isAnswered,
+  isSettled,
   isCorrect,
   option,
 }) {
   const radioId = getIdFrom(answer);
 
   let className = "answer";
-  if (isAnswered) {
+  if (isSettled) {
     className += isCorrect ? " correct" : " wrong";
   } else if (selected) {
     className += " selected";
@@ -195,7 +199,7 @@ export function Answer({
         name="answer"
         id={radioId}
         onChange={(e) => {
-          if (!isAnswered) {
+          if (!isSettled) {
             onSelectAnswer(e.target.value);
           }
         }}
@@ -203,7 +207,7 @@ export function Answer({
       />
       <span className="sr-only">Option {option} </span>
       <span className="label-text">{answer}</span>
-      {isAnswered && <AnswerIcon isCorrect={isCorrect} />}
+      {isSettled && <AnswerIcon isCorrect={isCorrect} />}
     </label>
   );
 }

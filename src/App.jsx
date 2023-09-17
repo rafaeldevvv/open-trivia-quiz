@@ -125,7 +125,7 @@ export default function App() {
           Coded by{" "}
           <a
             title="Rafael Maia's github page"
-            href="https://github.com/rafaeldevvv"
+            href="https://rafaeldevvv.github.io/portfolio"
           >
             Rafael Maia
           </a>

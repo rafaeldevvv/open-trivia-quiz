@@ -47,12 +47,46 @@ h2 {
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  transition-property: color, background-color;
-  transition-duration: 0.2s;
   background-color: #fff;
   color: #000;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
+  position: relative;
+  left: 0;
+}
+.btn::before, .btn::after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: #fff;
+}
+.btn::after {
+  left: 0;
+  width: 0;
+}
+.btn::before {
+  left: 0;
+  width: 0;
+}
+.btn, .btn::after, .btn::before {
+  transition-property: left, width;
+  transition-duration: 0.5s;
+}
+
+.btn:hover:not([disabled]), .btn:focus {
+  left: 24px;
+}
+.btn:hover:not([disabled])::before, .btn:focus::before {
+  left: -24px;
+  width: 6px;
+}
+.btn:hover:not([disabled])::after, .btn:focus::after {
+  left: -14px;
+  width: 9px;
 }
 
 .flex {
@@ -285,6 +319,7 @@ QuestionsSequence */
 }
 .question-wrapper .answer {
   display: flex;
+  align-items: center;
   gap: 0.6rem;
   cursor: pointer;
   position: relative;
@@ -387,6 +422,9 @@ Final screen*/
   margin-block: 0.3rem;
   background-color: hsla(0, 0%, 0%, 0.4);
   padding: 0.6rem;
+}
+.question-list .correct-answer,
+.question-list .wrong-answer {
   display: flex;
   justify-content: space-between;
   align-items: center;

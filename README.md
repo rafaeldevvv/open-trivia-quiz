@@ -1,7 +1,5 @@
 # Quiz App
 
-## Author
-
 ## Process
 
 ### Useful resources
@@ -15,5 +13,11 @@
 - [How to structure a web form](https://developer.mozilla.org/en-US/docs/Learn/Forms/How_to_structure_a_web_form#common_html_structures_used_with_forms)
 - [Screen reader reads twice when entering input in a form with aria-live="assertive" on Chrome](https://github.com/nvaccess/nvda/issues/6608)
 - [tab role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role)
+
+## Author
+- Instagram: [@rafaeldevvv](https://www.instagram.com/rafaeldevvv)
+- [Portfolio](https://rafaeldevvv.github.io/portfolio)
+- twitter: [@rafaeldevvv](https://www.twitter.com/rafaeldevvv)
+- Fiverr: 
 
 ## License
