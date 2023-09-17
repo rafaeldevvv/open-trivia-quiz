@@ -9,7 +9,6 @@
 body,
 html {
   scroll-behavior: smooth;
-  min-height: 100vh;
 }
 
 body {
@@ -123,9 +122,6 @@ h2 {
   animation: spin 1s infinite both;
 }
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
   to {
     transform: rotate(360deg);
   }
@@ -147,12 +143,6 @@ h2 {
 
   position: relative;
   background-color: white;
-
-  /* 
-  this is needed so when the label is clicked
-  the checkbox is toggled 
-  */
-  pointer-events: none;
 
   &.active {
     .checkbox-toggle-ball {
