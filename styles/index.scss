@@ -2,8 +2,8 @@
 :root {
   font-family: sans-serif;
 
-  --primary-blue: hsl(240, 50%, 4%);
-  --secondary-blue: hsl(240, 50%, 10%);
+  --primary-blue: hsl(240, 50%, 15%);
+  --secondary-blue: hsl(240, 50%, 20%);
 }
 
 body,
@@ -327,7 +327,7 @@ QuestionsSequence */
 
   .question,
   .answer {
-    background-color: hsla(0, 0%, 100%, 0.1);
+    background-color: hsla(0, 0%, 100%, 0.2);
     padding: 0.8rem 1.4rem;
   }
 

@@ -5,7 +5,7 @@ A simple quiz made with questions provided by the Open Trivia DB API
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Screenshot](#screenshot)
+  - [Screenshots](#screenshots)
   - [Links](#links)
 - [App](#app)
   - [Built with](#built-with)
@@ -17,7 +17,7 @@ A simple quiz made with questions provided by the Open Trivia DB API
 
 ## Overview
 
-### Screenshot
+### Screenshots
 
 ![](images/screenshot-quiz-form.png)
 ![](images/screenshot-question.png)
@@ -46,9 +46,9 @@ The API used for this quiz was the [Open Trivia DB API](https://opentdb.com/). I
 
 ### Idea
 
-The quiz consists of three states: choosing(selecting difficulty, category and so on), playing(answering questions) and finished(all questions are answered).
+The quiz consists of three states: choosing(selecting difficulty, category and so on), answering and finished(all questions are answered).
 
-When the quiz is in its "choosing" state, the user can select the category of the questions, the difficulty, the number of questions and they can toggle the time limit.
+When the quiz is in its "choosing" state, the user can select the category of the questions, the difficulty, the number of questions and they can turn the time limit on or off.
 
 Then the user answers the questions. And then, when all questions have been answered, the screen is updated to show how many questions the user got right and the percentage. There's also a tabbed interface for the user to see the correct and wrong questions.
 
@@ -138,7 +138,7 @@ I want to highlight the accessibility of this project because it was the project
 
 All controls are usable by the keyboard and I used WAI-ARIA attributes very well to give the content missing semantics. I also payed attention to the contrast of the colors.
 
-The two custom controls that I made in this project are the toggle button for the time limit and a tabbed interface to see the correct and wrong questions. Both are usable by the keyboard and screen reader users.
+The two custom controls that I made in this project are the toggle switch for the time limit and a tabbed interface to see the correct and wrong questions. Both are usable by keyboard and screen reader users.
 
 I tested my application thoroughly with [NVDA](https://www.nvaccess.org/download/).
 
@@ -377,7 +377,7 @@ Check out some of the useful resources below to know more about how I could make
 - [G133: Providing a checkbox on the first page of a multipart form that allows users to ask for longer session time limit or no session time limit](https://www.w3.org/TR/WCAG20-TECHS/G133.html)
 - [Getting value of HTML Checkbox from onclick/onchange events](https://stackoverflow.com/questions/4471401/getting-value-of-html-checkbox-from-onclick-onchange-events)
 - [Button inside a label](https://stackoverflow.com/questions/37504383/button-inside-a-label)
-- [Icon Archive](https://www.iconarchive.com/)
+- [Icon Archive](https://www.iconarchive.com/) - For the icons
 - [How to structure a web form](https://developer.mozilla.org/en-US/docs/Learn/Forms/How_to_structure_a_web_form#common_html_structures_used_with_forms)
 - [Screen reader reads twice when entering input in a form with aria-live="assertive" on Chrome](https://github.com/nvaccess/nvda/issues/6608)
 - [tab role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role) - To built the tabbed interface

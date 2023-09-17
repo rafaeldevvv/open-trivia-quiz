@@ -10,7 +10,7 @@ import {
 } from "./utils/fetch";
 
 export default function App() {
-  /* choosing, playing, finished */
+  /* choosing, answering, finished */
   const [status, setStatus] = useState("choosing");
   const [questions, setQuestions] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
@@ -57,7 +57,7 @@ export default function App() {
         difficulty
       );
       setQuestions(questionsResult);
-      setStatus("playing");
+      setStatus("answering");
     } catch (err) {
       reportError(err);
     } finally {
@@ -76,7 +76,7 @@ export default function App() {
   }
 
   const isChoosing = status === "choosing";
-  const isPlaying = status === "playing";
+  const isPlaying = status === "answering";
   const isFinished = status === "finished";
 
   const options = ["A", "B", "C", "D", "E"];
