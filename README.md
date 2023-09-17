@@ -13,7 +13,8 @@ A simple quiz made with questions provided by the Open Trivia DB API
   - [Idea](#idea)
   - [Fetching](#fetching)
   - [Accessibility](#accessibility)
-- [Useful resources](#useful-resources)
+  - [Useful resources](#useful-resources)
+- [Author](#author)
 
 ## Overview
 
@@ -370,7 +371,7 @@ export function QuestionsList({ questions, options, noQuestionsText }) {
 
 Check out some of the useful resources below to know more about how I could make it.
 
-## Useful resources
+### Useful resources
 
 - [Stack Overflow - Is it okay to have form controls outside a form?](https://stackoverflow.com/questions/5385610/are-form-elements-outside-of-a-form-tag-semantic-html5)
 - [Stack Exchange - How should time limits be communicated to screen reader users](https://ux.stackexchange.com/questions/98638/how-should-time-limits-be-communicated-to-screen-reader-users)
